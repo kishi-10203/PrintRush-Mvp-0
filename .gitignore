@@ -3,6 +3,11 @@ __pycache__/
 *.py[codz]
 *$py.class
 
+
+#Crededntial files
+credentials.json
+
+
 # C extensions
 *.so
 #Virtual-environments
