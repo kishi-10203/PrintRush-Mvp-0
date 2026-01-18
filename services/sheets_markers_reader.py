@@ -30,7 +30,7 @@ class SheetsMarkersReader:
 
         data = sheet.get_all_values()
         #testing
-        print(f"data fetched sucessfully \n {data}")
+        #print(f"data fetched sucessfully \n {data}")
 
         if not data:
             raise RuntimeError(f"Markers sheet '{self.sheet_name}' is empty")
