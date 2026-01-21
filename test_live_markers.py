@@ -27,7 +27,6 @@ def main():
     # 4️⃣ Fetch markers from the live Google Sheet
     try:
         markers = reader.fetch_markers()
-        logger.info("Markers fetched successfully:")
         for key, value in markers.items():
             print(f" - {key}: {value}")
     except RuntimeError as e:
