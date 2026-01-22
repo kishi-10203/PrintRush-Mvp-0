@@ -4,23 +4,16 @@ from typing import Dict, Any
 from types import MappingProxyType
 import os
 
+from services.batch_id_generator import batch_id_generator
+
 # dataclass imports
 from models.batch_context import BatchContext
 from config.static_config import GOOGLE_SHEETS_CONSTANTS, NOTION_CONSTANTS, WHATSAPP_CONSTANTS
 
-
-# Indian Standard Time (IST) timezone
-IST = timezone(timedelta(hours=5, minutes=30))
-
-
-
-def generate_execution_id(now: datetime) -> str:
-    """
-    Generates a human-readable execution batch ID.
-    Used ONLY for observability and logging.
-    """
-    timestamp = now.strftime("%Y%m%d-%H%M%S")
-    return f"EXEC-{timestamp}-IST"
+#logger imports 
+from models.system_logger import ETLLogger
+etl_logger = ETLLogger()
+logger = etl_logger.get_logger(file=__file__)
 
 
 
@@ -29,6 +22,8 @@ def load_environment() -> Dict[str, str]:
     Loads and validates required environment variables.
     Secrets only. No identifiers.
     """
+    logger.debug("Loading environment variables")
+
     load_dotenv()
 
     env = {
@@ -39,8 +34,11 @@ def load_environment() -> Dict[str, str]:
         "TWILIO_WHATSAPP_FROM": os.getenv("TWILIO_WHATSAPP_FROM"),
     }
 
+    logger.debug("Validating environment variables")
     missing = [key for key, value in env.items() if not value]
+
     if missing:
+        logger.critical(f"Missing required environment variables: {missing}")
         raise RuntimeError(
             f"Missing required environment variables: {missing}"
         )
@@ -73,12 +71,16 @@ def build_batch_context(
     - Immutable BatchContext snapshot
     """
 
+    # Indian Standard Time (IST) timezone
+    IST = timezone(timedelta(hours=5, minutes=30))
+
+
     # ---- Environment ----
     env = MappingProxyType(load_environment())
 
     # ---- Execution metadata ----
     batch_start_time = datetime.now(IST)
-    execution_id = generate_execution_id(batch_start_time)
+    batch_id = batch_id_generator(batch_start_time)
 
     # ---- Constants (read-only identifiers) ----
     constants = MappingProxyType({
