@@ -1,5 +1,5 @@
 # test_live_markers.py
-from services.google_auth_service import create_gspread_client
+from clients.google_auth_client import create_gspread_client
 from services.sheets_markers_reader import SheetsMarkersReader
 from models.system_logger import ETLLogger
 

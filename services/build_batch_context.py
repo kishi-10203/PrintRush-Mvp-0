@@ -15,7 +15,8 @@ from models.system_logger import ETLLogger
 etl_logger = ETLLogger()
 logger = etl_logger.get_logger(file=__file__)
 
-
+# Indian Standard Time (IST) timezone
+IST = timezone(timedelta(hours=5, minutes=30))
 
 def load_environment() -> Dict[str, str]:
     """
@@ -71,10 +72,6 @@ def build_batch_context(
     - Immutable BatchContext snapshot
     """
 
-    # Indian Standard Time (IST) timezone
-    IST = timezone(timedelta(hours=5, minutes=30))
-
-
     # ---- Environment ----
     env = MappingProxyType(load_environment())
 
@@ -100,7 +97,7 @@ def build_batch_context(
     # Example: { "HITS": 124, "VIT": 87 }
 
     return BatchContext(
-        execution_id=execution_id,
+        batch_id=batch_id,
         batch_start_time=batch_start_time,
         timezone="IST",
         env=env,

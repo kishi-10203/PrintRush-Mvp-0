@@ -52,7 +52,7 @@ def test_build_batch_context_structure(mock_readers):
 
     # --- Type checks ---
     assert isinstance(ctx, BatchContext)
-    assert isinstance(ctx.execution_id, str)
+    assert isinstance(ctx.batch_id, str)
     assert isinstance(ctx.batch_start_time, datetime)
     assert ctx.timezone == "IST"
 
@@ -100,13 +100,13 @@ def test_batch_context_immutable(mock_readers):
     # Attempting mutation should raise TypeError (for frozen dataclass and MappingProxyType)
     from dataclasses import FrozenInstanceError
     with pytest.raises((TypeError, FrozenInstanceError)):
-        ctx.execution_id = "NEW_EXEC_ID"
+        ctx.batch_id = "NEW_EXEC_ID"
 
     with pytest.raises((TypeError, FrozenInstanceError)):
         ctx.markers["last_processed_form_response_row"] = 999
 
 
-def test_execution_id_format(mock_readers):
+def test_batch_id_format(mock_readers):
     markers_reader, counter_reader = mock_readers
     ctx: BatchContext = build_batch_context(
         sheets_markers_reader=markers_reader,
@@ -117,5 +117,5 @@ def test_execution_id_format(mock_readers):
     )
 
     # Must start with "EXEC-" and end with "-IST"
-    assert ctx.execution_id.startswith("EXEC-")
-    assert ctx.execution_id.endswith("-IST")
+    assert ctx.batch_id.startswith("EXEC-")
+    assert ctx.batch_id.endswith("-IST")

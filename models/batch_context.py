@@ -12,7 +12,7 @@ class BatchContext:
     """
 
     # --- Batch metadata ---
-    execution_id: str
+    batch_id: str
     batch_start_time: datetime
     timezone: str  # Locked to "IST" by convention
 
