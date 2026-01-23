@@ -2,7 +2,7 @@ import pytest
 from datetime import datetime
 from services.build_batch_context import build_batch_context, IST
 from models.batch_context import BatchContext
-from config.static_config import GOOGLE_SHEETS_CONSTANTS, NOTION_CONSTANTS, WHATSAPP_CONSTANTS
+from config.static_config import GOOGLE_SHEETS_CONSTANTS, NOTION_CONSTANTS, WHATSAPP_CONSTANTS, SHEETS_MARKERS_KEYS, SHEETS_COUNTERS_KEYS
 
 # ----------------------------
 # Mock readers
@@ -16,7 +16,7 @@ class MockSheetsMetadataReader:
         }
 
 class MockSheetsOrderCounterReader:
-    def fetch_counters(self):
+    def fetch_order_counters(self):
         return {
             "HITS": 123,
             "VIT": 87,
@@ -56,6 +56,8 @@ def test_build_batch_context_structure(mock_readers):
     assert isinstance(ctx.batch_start_time, datetime)
     assert ctx.timezone == "IST"
 
+    # REMOVED - environment variables from BatchContext
+    """
     # --- Environment ---
     env_keys = [
         "NOTION_API_TOKEN",
@@ -68,17 +70,14 @@ def test_build_batch_context_structure(mock_readers):
         # Value can be None if .env not loaded in test; just check key presence
         assert key in ctx.env
 
+    """
     # --- Constants ---
     for k in ["google_sheets", "notion", "whatsapp"]:
         assert k in ctx.constants
 
     # --- Markers ---
     markers = ctx.markers
-    for key in [
-        "last_processed_form_response_row",
-        "last_notion_synced_row",
-        "last_whatsapp_notification_sent_row",
-    ]:
+    for key in SHEETS_MARKERS_KEYS:
         assert key in markers
 
     # --- Order counters ---

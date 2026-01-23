@@ -1,4 +1,4 @@
-
+from datetime import datetime, timezone, timedelta
 
 # ETL - Requirements Gathering Form Response Sheet Names
 GOOGLE_SHEETS_CONSTANTS = {
@@ -24,8 +24,20 @@ WHATSAPP_CONSTANTS = {
     "SENDER_NAME": "PrintRush",
 }
 
+
+# ETL - Sheets Markers Keys
 SHEETS_MARKERS_KEYS = [
     'last_processed_form_response_row',
     'last_notion_synced_row',
     'last_whatsapp_notification_sent_row',
 ]
+
+# ETL - Sheets Order Counters Keys
+SHEETS_COUNTERS_KEYS = [
+    'college_code',
+    'last_order_number',
+    'updated_at'
+]
+
+# Indian Standard Time (IST) timezone
+IST = timezone(timedelta(hours=5, minutes=30))

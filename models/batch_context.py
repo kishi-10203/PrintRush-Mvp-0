@@ -17,7 +17,7 @@ class BatchContext:
     timezone: str  # Locked to "IST" by convention
 
     # --- Environment / secrets ---
-    env: MappingProxyType[str, str | None]
+    # env: MappingProxyType[str, str | None]
 
     # --- Static constants ---
     constants: MappingProxyType[str, MappingProxyType[str, Any]]

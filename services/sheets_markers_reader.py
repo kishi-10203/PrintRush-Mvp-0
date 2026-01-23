@@ -23,6 +23,7 @@ class SheetsMarkersReader:
         self.spreadsheet_id = GOOGLE_SHEETS_CONSTANTS["MASTER_SPREAD_SHEET_ID"]
         self.sheet_name = GOOGLE_SHEETS_CONSTANTS["MARKERS_SHEET"]
 
+
     def fetch_markers(self) -> Dict[str, int]:
         """
         Reads the metadata sheet and returns last processed row numbers.

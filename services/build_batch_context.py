@@ -8,22 +8,21 @@ from services.batch_id_generator import batch_id_generator
 
 # dataclass imports
 from models.batch_context import BatchContext
-from config.static_config import GOOGLE_SHEETS_CONSTANTS, NOTION_CONSTANTS, WHATSAPP_CONSTANTS
+from config.static_config import GOOGLE_SHEETS_CONSTANTS, NOTION_CONSTANTS, WHATSAPP_CONSTANTS, IST
 
 #logger imports 
 from models.system_logger import ETLLogger
 etl_logger = ETLLogger()
 logger = etl_logger.get_logger(file=__file__)
 
-# Indian Standard Time (IST) timezone
-IST = timezone(timedelta(hours=5, minutes=30))
+
 
 def load_environment() -> Dict[str, str]:
     """
     Loads and validates required environment variables.
     Secrets only. No identifiers.
     """
-    logger.debug("Loading environment variables")
+    logger.info("loading environment variables")
 
     load_dotenv()
 
@@ -34,8 +33,9 @@ def load_environment() -> Dict[str, str]:
         "TWILIO_AUTH_TOKEN": os.getenv("TWILIO_AUTH_TOKEN"),
         "TWILIO_WHATSAPP_FROM": os.getenv("TWILIO_WHATSAPP_FROM"),
     }
+    logger.debug("environment variables loaded")
 
-    logger.debug("Validating environment variables")
+    logger.debug("validating environment variables")
     missing = [key for key, value in env.items() if not value]
 
     if missing:
@@ -43,6 +43,7 @@ def load_environment() -> Dict[str, str]:
         raise RuntimeError(
             f"Missing required environment variables: {missing}"
         )
+    logger.info("all environment variables are loaded and validated")
 
     return env
 
@@ -72,8 +73,9 @@ def build_batch_context(
     - Immutable BatchContext snapshot
     """
 
+    logger.info("building batch context")
     # ---- Environment ----
-    env = MappingProxyType(load_environment())
+    #env = MappingProxyType(load_environment())
 
     # ---- Execution metadata ----
     batch_start_time = datetime.now(IST)
@@ -93,14 +95,16 @@ def build_batch_context(
     # - last_whatsapp_notification_sent_row
 
     # ---- College-wise order counters ----
-    order_counters = MappingProxyType(sheets_order_counter_reader.fetch_counters())
+    order_counters = MappingProxyType(sheets_order_counter_reader.fetch_order_counters())
     # Example: { "HITS": 124, "VIT": 87 }
+    
+    logger.info("batch context built successfully")
 
     return BatchContext(
         batch_id=batch_id,
         batch_start_time=batch_start_time,
         timezone="IST",
-        env=env,
+        #env=env,
         constants=constants,
         markers=markers,
         order_counters=order_counters,
