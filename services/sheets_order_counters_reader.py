@@ -45,7 +45,7 @@ class OrderCountersReader:
         spreadsheet = self.sheets_service.open_by_key(self.spreadsheet_id)
         sheet = spreadsheet.worksheet(self.sheet_name)
         data = sheet.get_all_values()
-        logger.info(f"Data fetched successfully, {len(data)} rows found")
+        logger.debug(f"Data fetched successfully, {len(data)} rows found")
 
         if not data:
             logger.critical(f"Order counters sheet '{self.sheet_name}' is empty")
