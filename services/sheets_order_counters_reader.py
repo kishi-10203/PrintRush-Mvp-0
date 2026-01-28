@@ -11,7 +11,6 @@ etl_logger = ETLLogger()
 logger = etl_logger.get_logger(file=__file__)
 
 
-
 class OrderCountersReader:
     """
     Reads order counters from a Google Sheet.

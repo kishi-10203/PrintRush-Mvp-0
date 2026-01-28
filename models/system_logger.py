@@ -40,7 +40,7 @@ class ETLLogger:
         console_handler = logging.StreamHandler(sys.stdout)
         console_handler.setLevel(logging.DEBUG)
         console_formatter = logging.Formatter(
-            fmt="%(asctime)s.%(msecs)03d - %(name)s - %(levelname)s - %(message)s",
+            fmt="%(asctime)s.%(msecs)03d - %(levelname)s  - %(name)s - %(message)s",
             datefmt="%H:%M:%S",
         )
         console_handler.setFormatter(console_formatter)
@@ -65,7 +65,7 @@ class ETLLogger:
         self._file_handler.setLevel(logging.INFO)
 
         file_formatter = logging.Formatter(
-            fmt="%(asctime)s.%(msecs)03d - %(name)s - %(levelname)s - %(message)s",
+            fmt="%(asctime)s.%(msecs)03d - %(levelname)s - %(name)s - %(message)s",
             datefmt="%Y-%m-%d %H:%M:%S",
         )
         self._file_handler.setFormatter(file_formatter)
