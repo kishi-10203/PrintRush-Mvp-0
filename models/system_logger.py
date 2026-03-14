@@ -112,7 +112,7 @@ class ETLLogger:
             console_handler = logging.StreamHandler(sys.stdout)
             console_handler.setLevel(logging.DEBUG)
             console_formatter = logging.Formatter(
-                fmt="%(asctime)s.%(msecs)03d - %(name)s - %(levelname)s - %(message)s",
+                fmt="%(asctime)s.%(msecs)03d - %(levelname)s - %(name)s - %(message)s",
                 datefmt="%H:%M:%S",
             )
             console_handler.setFormatter(console_formatter)
